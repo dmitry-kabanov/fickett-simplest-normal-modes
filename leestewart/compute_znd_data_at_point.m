@@ -1,8 +1,15 @@
 function [znd] = compute_znd_data_at_point(x, d, q, theta, k)
     assert(isscalar(x))
-
-    lambda = deval(znd_sol, x);
-    u = d + sqrt(d^2 - q*lambda);
+    
+    if x == 0.0
+        u = 2*d;
+        lambda = 0.0;
+    else
+        ic = 0.0;
+        [~, sol] = ode45(@zndrhsfun, [0 x], ic);
+        lambda = sol(end);
+        u = d + sqrt(d^2 - q*lambda);
+    end
 
     tmp = k * exp((u + q*lambda) * theta);    
 
