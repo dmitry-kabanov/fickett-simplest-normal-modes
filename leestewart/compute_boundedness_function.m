@@ -1,4 +1,4 @@
-function [H] = compute_boundedness_function(alpha, M, params)
+function [H] = compute_boundedness_function(alpha, M, params, znd_sol)
 % Compute "boundedness function" $H(\alpha)$.
 % 
 % Parameters
@@ -9,6 +9,8 @@ function [H] = compute_boundedness_function(alpha, M, params)
 %     Domain length.
 % params : struct
 %     Parameters of the ZND solution.
+% znd_sol : struct
+%     Structure returned by ODE solver after solution of the ZND problem.
 % 
 % Returns
 % -------
@@ -22,78 +24,50 @@ k = params.k;
 ic = [2*alpha 0];
 xspan = [0 -M];
 
-rhsfun = @(x, y) rhsfun_impl(x, y, alpha, d, q, theta, k);
-[~, y] = ode45(rhsfun, xspan, ic);
-pert_u = y(1);
-pert_lambda = y(2);
+rhsfun = @(x, y) rhsfun_impl(x, y, alpha, d, q, theta, k, znd_sol);
+opts = odeset('RelTol', 1e-8, 'AbsTol', 1e-8);
+sol = ode45(rhsfun, xspan, ic, opts);
+pert_u = y(end, 1);
+pert_lambda = y(end, 2);
 
-znd = compute_znd_data(-M, d, q, theta, k);
+znd = compute_znd_data_at_point(-M, d, q, theta, k, znd_sol);
 
 sigma = 0.5 * q;
-term_1 = -(alpha + znd.du_dx + sigma * znd.dw_du) * pert_u;
-term_2 = sigma * znd.dw_dl * pert_lambda;
-term_3 = alpha * znd.du_dx;
+
+r_term_1 = -znd.dw_du * pert_u;
+r_term_2 = (alpha - znd.dw_dl) * pert_lambda;
+r_term_3 = -znd.dl_dx * alpha;
+numer = r_term_1 + r_term_2 + r_term_3;
+rprime = numer / d;
+
+term_1 = -(alpha + znd.du_dx) * pert_u;
+term_2 = znd.du_dx * alpha;
+term_3 = -sigma * rprime;
 H = term_1 + term_2 + term_3;
 end
 
 
 %------------------------------------------------------------------------------
-function rhs = rhsfun_impl(x, y, alpha, d, q, theta, k)
+function rhs = rhsfun_impl(x, y, alpha, d, q, theta, k, znd_sol)
     u = y(1);
     lambda = y(2);
     
     rhs = zeros(2, 1);
 
-    znd = compute_znd_data(x, d, q, theta, k);
+    znd = compute_znd_data_at_point(x, d, q, theta, k, znd_sol);
     
     sigma = 0.5 * q;
     
-    term_1 = -(alpha + znd.du_dx + sigma * znd.dw_du) * u;
-    term_2 = sigma * znd.dw_dl * lambda;
-    term_3 = alpha * znd.du_dx;
-    numer = term_1 + term_2 + term_3;
-    denom = znd.u - d;
-    rhs(1) = numer / denom;
+    r_term_1 = -znd.dw_du * u;
+    r_term_2 = (alpha - znd.dw_dl) * lambda;
+    r_term_3 = -znd.dl_dx * alpha;
+    numer = r_term_1 + r_term_2 + r_term_3;
+    rprime = numer / d;
 
-    term_1 = -znd.dw_du * u;
-    term_2 = (alpha - znd.dw_dl) * lambda;
-    term_3 = - alpha * znd.dl_dx;
-    rhs(2) = term_1 + term_2 + term_3;
-end
-
-
-%------------------------------------------------------------------------------
-function [znd] = compute_znd_data(x, d, q, theta, k)
-    if x == 0.0
-        u = 2*d;
-        lambda = 0.0;
-    else
-        ic = 0.0;
-        [~, sol] = ode45(@zndrhsfun, [0 x], ic);
-        lambda = sol(end);
-        u = d + sqrt(d^2 - q*lambda);
-    end
-
-    tmp = k * exp((u + q*lambda) * theta);    
-
-    w =  (1 - lambda) * tmp;
-    dl_dx = -w / d;
-    du_dx = 0.5 * q * w / (d * sqrt(d^2 - q*lambda));
-    dw_du = theta * w;
-    dw_dl = tmp * ((1 - lambda) * theta * q - 1);
-
-    znd.u = u;
-    znd.l = lambda;
-    znd.du_dx = du_dx;
-    znd.dl_dx = dl_dx;
-    znd.dw_du = dw_du;
-    znd.dw_dl = dw_dl;
-
-
-    function res = zndrhsfun(~, y)
-       lambda_ = y(1);
-       u_ = d + sqrt(d^2 - q*lambda_);
-       omega_ = k * (1 - lambda_) * exp((u_ + q*lambda_) * theta);
-       res = -omega_ / d;
-    end
+    u_term_1 = -(alpha + znd.du_dx) * u;
+    u_term_2 = znd.du_dx * alpha;
+    u_term_3 = -sigma * rprime;
+    u_numer = u_term_1 + u_term_2 + u_term_3;
+    rhs(1) = u_numer / (znd.u - d);
+    rhs(2) = rprime;
 end

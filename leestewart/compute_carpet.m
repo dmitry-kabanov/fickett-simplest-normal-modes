@@ -1,4 +1,4 @@
-function [ALPHA_RE, ALPHA_IM, H] = compute_carpet(params, M, cp)
+function [ALPHA_RE, ALPHA_IM, H] = compute_carpet(params, M, cp, znd_sol)
 %COMPUTE_CARPET     Compute a "carpet" of "boundedness condition".
 %
 %   To do linear stability analysis of the Fickett--Faria model by the
@@ -33,6 +33,8 @@ function [ALPHA_RE, ALPHA_IM, H] = compute_carpet(params, M, cp)
 %           Lower and upper bounds on the real axis.
 %       lb_im, ub_im : float
 %           Lower and upper bounds on the imaginary axis.
+%   znd_sol : struct
+%       Struct returned by ODE solver from solution of the ZND problem.
 %
 %   Returns
 %   -------
@@ -61,10 +63,11 @@ alpha_im = linspace(cp.lb_im, cp.ub_im, cp.n_im);
 H = zeros(cp.n_re, cp.n_im);
 
 for j = 1:cp.n_im
+    alpha_imag = alpha_im(j);
     parfor i = 1:cp.n_re
-        alpha = alpha_re(i) + 1j * alpha_im(j);
+        alpha = alpha_re(i) + 1j * alpha_imag;
         
-        H(i, j) = compute_boundedness_function(alpha, M, params);
+        H(i, j) = compute_boundedness_function(alpha, M, params, znd_sol);
         fprintf('%d, %d\n', i, j);
     end
 end
