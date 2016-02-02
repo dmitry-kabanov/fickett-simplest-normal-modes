@@ -13,8 +13,6 @@ M = 13;
 % Struct with free and dependent parameters.
 params = compute_aux_params(q, theta);
 
-znd_sol = get_znd_sol(M, params);
-
 % Carpet search parameters: lb - lower bound, ub - upper bound, n - resolution.
 cp.lb_re = -5e-2;
 cp.ub_re = 5e-2;
@@ -24,7 +22,7 @@ cp.n_re = 10;
 cp.n_im = 10;
 
 
-[alpha_re, alpha_im, H] = compute_carpet(params, M, cp, znd_sol);
+[alpha_re, alpha_im, H] = compute_carpet(params, M, cp);
 plot_carpet(alpha_re, alpha_im, H);
 
 % Find indices of minimum on the carpet.

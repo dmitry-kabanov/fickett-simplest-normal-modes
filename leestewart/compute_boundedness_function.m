@@ -1,4 +1,4 @@
-function [H] = compute_boundedness_function(alpha, M, params, znd_sol)
+function [H] = compute_boundedness_function(alpha, M, params)
 % Compute "boundedness function" $H(\alpha)$.
 % 
 % Parameters
@@ -9,8 +9,6 @@ function [H] = compute_boundedness_function(alpha, M, params, znd_sol)
 %     Domain length.
 % params : struct
 %     Parameters of the ZND solution.
-% znd_sol : struct
-%     Structure returned by ODE solver after solution of the ZND problem.
 % 
 % Returns
 % -------
@@ -24,13 +22,13 @@ k = params.k;
 ic = [2*alpha 0];
 xspan = [0 -M];
 
-rhsfun = @(x, y) rhsfun_impl(x, y, alpha, d, q, theta, k, znd_sol);
+rhsfun = @(x, y) rhsfun_impl(x, y, alpha, d, q, theta, k);
 opts = odeset('RelTol', 1e-8, 'AbsTol', 1e-8);
 sol = ode45(rhsfun, xspan, ic, opts);
 pert_u = y(end, 1);
 pert_lambda = y(end, 2);
 
-znd = compute_znd_data_at_point(-M, d, q, theta, k, znd_sol);
+znd = compute_znd_data_at_point(-M, d, q, theta, k);
 
 sigma = 0.5 * q;
 
@@ -48,13 +46,13 @@ end
 
 
 %------------------------------------------------------------------------------
-function rhs = rhsfun_impl(x, y, alpha, d, q, theta, k, znd_sol)
+function rhs = rhsfun_impl(x, y, alpha, d, q, theta, k)
     u = y(1);
     lambda = y(2);
     
     rhs = zeros(2, 1);
 
-    znd = compute_znd_data_at_point(x, d, q, theta, k, znd_sol);
+    znd = compute_znd_data_at_point(x, d, q, theta, k);
     
     sigma = 0.5 * q;
     

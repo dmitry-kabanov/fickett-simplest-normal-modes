@@ -1,4 +1,4 @@
-function [znd] = compute_znd_data_at_point(x, d, q, theta, k, znd_sol)
+function [znd] = compute_znd_data_at_point(x, d, q, theta, k)
     assert(isscalar(x))
 
     lambda = deval(znd_sol, x);
