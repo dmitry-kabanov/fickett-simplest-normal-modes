@@ -25,8 +25,8 @@ xspan = [0 -M];
 rhsfun = @(x, y) rhsfun_impl(x, y, alpha, d, q, theta, k);
 opts = odeset('RelTol', 1e-8, 'AbsTol', 1e-8);
 sol = ode45(rhsfun, xspan, ic, opts);
-pert_u = y(end, 1);
-pert_lambda = y(end, 2);
+pert_u = sol.y(end, 1);
+pert_lambda = sol.y(end, 2);
 
 znd = compute_znd_data_at_point(-M, d, q, theta, k);
 
