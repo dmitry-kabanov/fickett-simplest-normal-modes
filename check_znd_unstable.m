@@ -20,6 +20,9 @@ u = zeros('like', x);
 lambda = zeros('like', x);
 du_dx = zeros('like', x);
 dl_dx = zeros('like', x);
+dw_du = zeros('like', x);
+dw_dl = zeros('like', x);
+w = zeros('like', x);
 
 for i = 1:length(x)
     znd = compute_znd_data_at_point(x(i), d, q, theta, k);
@@ -27,4 +30,7 @@ for i = 1:length(x)
     lambda(i) = znd.l;
     du_dx(i) = znd.du_dx;
     dl_dx(i) = znd.dl_dx;
+    dw_du(i) = znd.dw_du;
+    dw_dl(i) = znd.dw_dl;
+    w(i) = znd.w;
 end
