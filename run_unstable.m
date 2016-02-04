@@ -14,12 +14,12 @@ M = 13;
 params = compute_aux_params(q, theta);
 
 % Carpet search parameters: lb - lower bound, ub - upper bound, n - resolution.
-cp.lb_re = -5e-2;
+cp.lb_re = 0;
 cp.ub_re = 5e-2;
 cp.lb_im = 0;
 cp.ub_im = 1;
-cp.n_re = 10;
-cp.n_im = 10;
+cp.n_re = 50;
+cp.n_im = 50;
 
 
 [alpha_re, alpha_im, H] = compute_carpet(params, M, cp);
