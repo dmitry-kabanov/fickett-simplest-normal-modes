@@ -24,6 +24,7 @@ params.q = q;
 params.theta = theta;
 params.d = d;
 params.k = k;
+params.sigma = 0.5 * q;
 end
 
 
