@@ -13,8 +13,10 @@ function plot_carpet(alpha_re, alpha_im, H)
 % H : matrix
 %     Complex-valued function of "boundedness condition".
 
+[A_RE, A_IM] = meshgrid(alpha_re, alpha_im);
+
 figure
-surf(alpha_re, alpha_im, abs(H))
+surf(A_RE', A_IM', abs(H))
 xlabel('\Re \alpha')
 ylabel('\Im \alpha')
 title('abs(H)')
