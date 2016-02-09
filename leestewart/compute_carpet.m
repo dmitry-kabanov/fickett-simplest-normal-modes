@@ -1,4 +1,4 @@
-function [ALPHA_RE, ALPHA_IM, H] = compute_carpet(params, lambda_tol, cp)
+function [alpha_re, alpha_im, H] = compute_carpet(params, lambda_tol, cp)
 %COMPUTE_CARPET     Compute a "carpet" of "boundedness condition".
 %
 %   To do linear stability analysis of the Fickett--Faria model by the
@@ -36,11 +36,11 @@ function [ALPHA_RE, ALPHA_IM, H] = compute_carpet(params, lambda_tol, cp)
 %
 %   Returns
 %   -------
-%   ALPHA_RE : array (`N_RE` by `N_IM`)
+%   alpha_re : 1d array (`cp.n_re`)
 %       Real part of `alpha` grid.
-%   ALPHA_IM : array (`N_RE` by `N_IM`)
+%   alpha_im : 1d array (`cp.n_im`)
 %       Imaginary part of `alpha` grid.
-%   H : array (`N_RE` by `N_IM`)
+%   H : 2d array (`cp.n_re` by `cp.n_im`)
 %       Values of the "boundedness-condition" function `H` on the grid.
 %   
 %   References
@@ -70,5 +70,4 @@ for j = 1:cp.n_im
     end
 end
 
-[ALPHA_RE, ALPHA_IM] = meshgrid(alpha_re, alpha_im);
 end
