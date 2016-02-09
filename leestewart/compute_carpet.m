@@ -62,7 +62,7 @@ H = zeros(cp.n_re, cp.n_im);
 
 for j = 1:cp.n_im
     alpha_imag = alpha_im(j);
-    for i = 1:cp.n_re
+    parfor i = 1:cp.n_re
         alpha = alpha_re(i) + 1j * alpha_imag;
         
         H(i, j) = compute_boundedness_function(alpha, lambda_tol, params);
