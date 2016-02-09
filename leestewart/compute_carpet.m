@@ -1,4 +1,4 @@
-function [ALPHA_RE, ALPHA_IM, H] = compute_carpet(params, M, cp)
+function [ALPHA_RE, ALPHA_IM, H] = compute_carpet(params, lambda_tol, cp)
 %COMPUTE_CARPET     Compute a "carpet" of "boundedness condition".
 %
 %   To do linear stability analysis of the Fickett--Faria model by the
@@ -21,8 +21,8 @@ function [ALPHA_RE, ALPHA_IM, H] = compute_carpet(params, M, cp)
 %           Detonation velocity
 %       k : float
 %           Arrhenius prefactor.
-%   M : float
-%       The length of the reaction zone. Domain will be [-M 0].
+%   lambda_tol : float
+%       Tolerance of :math:`lambda`. Domain will be `[0, 1-lambda_tol]`.
 %   cp : struct
 %       Carpet parameters.
 %       n_re : int
@@ -62,10 +62,10 @@ H = zeros(cp.n_re, cp.n_im);
 
 for j = 1:cp.n_im
     alpha_imag = alpha_im(j);
-    parfor i = 1:cp.n_re
+    for i = 1:cp.n_re
         alpha = alpha_re(i) + 1j * alpha_imag;
         
-        H(i, j) = compute_boundedness_function(alpha, M, params);
+        H(i, j) = compute_boundedness_function(alpha, lambda_tol, params);
         fprintf('%d, %d\n', i, j);
     end
 end

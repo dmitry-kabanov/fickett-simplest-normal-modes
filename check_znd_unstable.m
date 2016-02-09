@@ -1,5 +1,5 @@
 % Check that we compute ZND structure correctly when we use function
-% `compute_znd_data`.
+% `compute_znd_data_at_point`.
 close all;
 clear;
 
@@ -9,27 +9,23 @@ q = 1.7; theta = 2.4;
 % Struct with free and dependent parameters.
 params = compute_aux_params(q, theta);
 
-d = params.d;
-k = params.k;
+% Lambda tolerance, that is, closeness of lambda to unity.
+lambda_tol = 1e-4;
 
-% Domain length.
-M = 13;
+lambda = linspace(0, 1-lambda_tol, 1000);
+u = zeros('like', lambda);
+du_dx = zeros('like', lambda);
+du_dl = zeros('like', lambda);
+dl_dx = zeros('like', lambda);
+dw_du = zeros('like', lambda);
+dw_dl = zeros('like', lambda);
+w = zeros('like', lambda);
 
-x = linspace(-M, 0, 1000);
-u = zeros('like', x);
-lambda = zeros('like', x);
-du_dx = zeros('like', x);
-dl_dx = zeros('like', x);
-dw_du = zeros('like', x);
-dw_dl = zeros('like', x);
-w = zeros('like', x);
+for i = 1:length(lambda)
+    znd = compute_znd_data_at_point(lambda(i), params);
 
-for i = 1:length(x)
-    znd = compute_znd_data_at_point(x(i), d, q, theta, k);
     u(i) = znd.u;
-    lambda(i) = znd.l;
-    du_dx(i) = znd.du_dx;
-    dl_dx(i) = znd.dl_dx;
+    du_dl(i) = znd.du_dl;
     dw_du(i) = znd.dw_du;
     dw_dl(i) = znd.dw_dl;
     w(i) = znd.w;
