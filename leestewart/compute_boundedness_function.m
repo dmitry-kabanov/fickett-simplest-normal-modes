@@ -20,9 +20,9 @@ ic = [2*alpha 0];
 xspan = [0 1-lambda_tol];
 
 rhsfun = @(x, y) rhsfun_impl(x, y, alpha, params);
-opts = odeset('RelTol', 1e-12, 'AbsTol', 1e-12, ...
+opts = odeset('RelTol', 1e-13, 'AbsTol', 1e-13, ...
               'Events', @event_check_singular_du_dx);
-sol = ode15s(rhsfun, xspan, ic, opts);
+sol = ode45(rhsfun, xspan, ic, opts);
 
 if sol.xe < (1-lambda_tol)
     H = 10;
