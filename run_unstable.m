@@ -8,7 +8,7 @@ clear variables
 q = 1.7; theta = 2.4;
 
 % Lambda tolerance, that is, closeness of lambda to unity.
-lambda_tol = 1e-3;
+lambda_tol = 1e-5;
 
 % Struct with free and dependent parameters.
 params = compute_aux_params(q, theta);
@@ -18,8 +18,8 @@ cp.lb_re = 0;
 cp.ub_re = 5e-2;
 cp.lb_im = 0;
 cp.ub_im = 1;
-cp.n_re = 10;
-cp.n_im = 10;
+cp.n_re = 30;
+cp.n_im = 30;
 
 
 [alpha_re, alpha_im, H] = compute_carpet(params, lambda_tol, cp);
