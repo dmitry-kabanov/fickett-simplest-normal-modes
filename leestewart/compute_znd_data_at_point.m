@@ -11,13 +11,13 @@ function [znd] = compute_znd_data_at_point(lambda, params)
 
     znd.u = u;
     znd.l = lambda;
-    znd.w = (1 - lambda) * tmp;
+    znd.w = (1 - lambda) .* tmp;
 
-    dl_dx = -znd.w / d;
-    du_dx = -0.5 * q * dl_dx / u_min_d;
+    znd.dl_dx = -znd.w / d;
+    znd.du_dx = -0.5 * q * znd.dl_dx ./ u_min_d;
 
-    znd.du_dl = (-d / znd.w) * du_dx;
+    znd.du_dl = (-d ./ znd.w) .* znd.du_dx;
 
     znd.dw_du = theta * znd.w;
-    znd.dw_dl = tmp * ((1 - lambda) * theta * q - 1);
+    znd.dw_dl = tmp .* ((1 - lambda) * theta * q - 1);
 end
