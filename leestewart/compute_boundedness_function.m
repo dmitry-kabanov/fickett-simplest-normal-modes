@@ -23,7 +23,7 @@ ic = [2*alpha 0];
 xspan = [0 -M];
 
 rhsfun = @(x, y) rhsfun_impl(x, y, alpha, d, q, theta, k);
-opts = odeset('RelTol', 1e-12, 'AbsTol', 1e-12);
+opts = odeset('RelTol', 1e-13, 'AbsTol', 1e-13);
 %sol = ode45(rhsfun, xspan, ic, opts);
 %opts = odeset('Events', @event_check_singular_du_dx);
 sol = ode45(rhsfun, xspan, ic, opts);
