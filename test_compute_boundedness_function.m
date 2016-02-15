@@ -4,8 +4,13 @@ clear variables
 % Physical free parameters.
 q = 1.7; theta = 2.4;
 
+% Resolution.
+N = 200;
+
 % Lambda tolerance.
-lambda_tol = 1e-3;
+lambda_tol = 1.0 / N;
+
+M = 
 
 % Struct with free and dependent parameters.
 params = compute_aux_params(q, theta);

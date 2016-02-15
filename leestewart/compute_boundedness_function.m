@@ -1,4 +1,4 @@
-function [H] = compute_boundedness_function(alpha, lambda_tol, params)
+function [H] = compute_boundedness_function(alpha, grid, znd_all, params)
 % Compute "boundedness function" :math:`H(\alpha)`.
 % 
 % Parameters
@@ -15,68 +15,27 @@ function [H] = compute_boundedness_function(alpha, lambda_tol, params)
 % -------
 % H : complex
 %     Value of the "boundedness function".
+sol = compute_linearized_problem(alpha, grid, znd_all, params);
 
-ic = [2*alpha 0];
-xspan = [0 1-lambda_tol];
+pert_u = sol(1, end);
+pert_lambda = sol(2, end);
 
-rhsfun = @(x, y) rhsfun_impl(x, y, alpha, params);
-opts = odeset('RelTol', 1e-13, 'AbsTol', 1e-13, ...
-              'Events', @event_check_singular_du_dx);
-sol = ode45(rhsfun, xspan, ic, opts);
+znd_du_dx = znd_all.dl_dx(end);
+znd_dl_dx = znd_all.dl_dx(end);
+znd_dw_du = znd_all.dw_du(end);
+znd_dw_dl = znd_all.dw_dl(end);
 
-if sol.xe < (1-lambda_tol)
-    H = 10;
-else
-    pert_u = sol.y(1, end);
-    pert_lambda = sol.y(2, end);
+r_term_1 = -znd_dw_du * pert_u;
+r_term_2 = (alpha - znd_dw_dl) * pert_lambda;
+r_term_3 = -znd_dl_dx * alpha;
+numer = r_term_1 + r_term_2 + r_term_3;
+rprime = numer / params.d;
 
-    znd = compute_znd_data_at_point(1-lambda_tol, params);
-
-    r_term_1 = -znd.dw_du * pert_u;
-    r_term_2 = (alpha - znd.dw_dl) * pert_lambda;
-    r_term_3 = -alpha;
-    numer = r_term_1 + r_term_2 + r_term_3;
-    rprime = numer / params.d;
-
-    term_1 = -(alpha + znd.du_dl) * pert_u;
-    term_2 = znd.du_dl * alpha;
-    term_3 = params.d * params.sigma * rprime / znd.w;
-    H = term_1 + term_2 + term_3;
-end
+term_1 = -(alpha + znd_du_dx) * pert_u;
+term_2 = znd_du_dx * alpha;
+term_3 = -params.sigma * rprime;
+H = term_1 + term_2 + term_3;
 end
 
 
-%------------------------------------------------------------------------------
-function rhs = rhsfun_impl(x, y, alpha, params)
-    u = y(1);
-    lambda = y(2);
-    rhs = zeros(2, 1);
 
-    d = params.d;
-    znd = compute_znd_data_at_point(x, params);
-    
-    r_term_1 = -znd.dw_du * u;
-    r_term_2 = (alpha - znd.dw_dl) * lambda;
-    r_term_3 = -alpha;
-    numer = r_term_1 + r_term_2 + r_term_3;
-    rprime = numer / d;
-
-    u_term_1 = -(alpha + znd.du_dl) * u;
-    u_term_2 = znd.du_dl * alpha;
-    u_term_3 = d * params.sigma * rprime / znd.w;
-    u_numer = u_term_1 + u_term_2 + u_term_3;
-    rhs(1) = u_numer / (znd.u - d);
-    rhs(2) = rprime;
-
-    rhs = (-d / znd.w) * rhs;
-end
-
-
-%--------------------------------------------------------------------------
-function [value, isterminal, direction] = event_check_singular_du_dx(~, y)
-u = y(1);
-
-value = abs(u) - 1000;
-isterminal = 1;
-direction = 0;
-end
