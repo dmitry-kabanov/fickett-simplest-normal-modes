@@ -1,23 +1,26 @@
 close all
-clear variables
+clear all
+clc
 
 % Physical free parameters.
 q = 1.7; theta = 2.4;
 
+% Struct with free and dependent parameters.
+params = compute_aux_params(q, theta);
+
 % Resolution.
-N = 200;
+N = 1e5;
 
 % Lambda tolerance.
 lambda_tol = 1.0 / N;
 
-M = 
+M = compute_x_at_point(1-lambda_tol, params);
 
-% Struct with free and dependent parameters.
-params = compute_aux_params(q, theta);
+grid = linspace(0, M, N);
 
-alpha = 3.269e-2 + 1j * 6.636e-1;
+znd_all = compute_znd(grid, params);
 
 alpha_re = 3.2689475021629215e-02;
 alpha_im = 6.6361473999774434e-01;
 alpha = alpha_re + 1j * alpha_im;
-H = compute_boundedness_function(alpha, lambda_tol, params);
+H = compute_boundedness_function(alpha, grid, znd_all, params);

@@ -11,6 +11,7 @@ if n == 1  % column vector
     y = ic;
 else       % row vector, must be transposed
     y = ic';
+end
     
 sol = zeros(length(y), length(times));
 sol(:, 1) = y;

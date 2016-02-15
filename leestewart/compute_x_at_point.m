@@ -7,6 +7,9 @@ end
 
 %-------------------------------------------------------------------------------
 function [f] = f_impl(s, params)
-omega = params.k * (1 - s) * exp((u + q * lambda) * params.theta);
-f = -params.d ./ omega;
+d = params.d;
+q = params.q;
+u = d + sqrt(d^2 - q*s);
+omega = params.k * (1 - s) .* exp((u + q*s) * params.theta);
+f = -d ./ omega;
 end

@@ -3,7 +3,10 @@ function [sol] = compute_linearized_problem(alpha, grid, znd_all, params)
 %   Detailed explanation goes here
 
 rhsfun = @(t, y, idx) rhsfun_impl(t, y, idx, alpha, znd_all, params);
-ic = [2*alpha 0];
+alpha_re = real(alpha);
+alpha_im = imag(alpha);
+
+ic = [2*alpha_re; 2*alpha_im; 0; 0];
 sol = rk4(rhsfun, grid, ic);
 end
 

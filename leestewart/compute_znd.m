@@ -5,9 +5,9 @@ function [znd] = compute_znd(grid, params)
     theta = params.theta;
     
     ic = 0.0;
-    opts = odeset('RelTol', 1e-14, 'AbsTol', 1e-14);
-    sol = ode45(@zndrhsfun, grid, ic, opts);
-    lambda = sol.y;
+    opts = odeset('RelTol', 1e-13, 'AbsTol', 1e-13);
+    [t_, sol] = ode45(@zndrhsfun, grid, ic, opts);
+    lambda = sol;
     assert(isvector(lambda));
     
     u_min_d = sqrt(d^2 - q*lambda);

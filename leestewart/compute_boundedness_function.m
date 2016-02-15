@@ -17,8 +17,13 @@ function [H] = compute_boundedness_function(alpha, grid, znd_all, params)
 %     Value of the "boundedness function".
 sol = compute_linearized_problem(alpha, grid, znd_all, params);
 
-pert_u = sol(1, end);
-pert_lambda = sol(2, end);
+pert_u_re = sol(1, end);
+pert_u_im = sol(2, end);
+pert_lambda_re = sol(3, end);
+pert_lambda_im = sol(4, end);
+
+pert_u = pert_u_re + 1j * pert_u_im;
+pert_lambda = pert_lambda_re + 1j * pert_lambda_im;
 
 znd_du_dx = znd_all.dl_dx(end);
 znd_dl_dx = znd_all.dl_dx(end);
@@ -36,6 +41,3 @@ term_2 = znd_du_dx * alpha;
 term_3 = -params.sigma * rprime;
 H = term_1 + term_2 + term_3;
 end
-
-
-
