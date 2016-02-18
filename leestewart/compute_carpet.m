@@ -58,14 +58,17 @@ function [alpha_re, alpha_im, H] = compute_carpet(cp, grid, znd_all, params)
 alpha_re = linspace(cp.lb_re, cp.ub_re, cp.n_re);
 alpha_im = linspace(cp.lb_im, cp.ub_im, cp.n_im);
 
-H = zeros(cp.n_re, cp.n_im);
+H = zeros(cp.n_im, cp.n_re);
 
-for j = 1:cp.n_im
-    alpha_imag = alpha_im(j);
-    parfor i = 1:cp.n_re
-        alpha = alpha_re(i) + 1j * alpha_imag;
+for j = 1:cp.n_re
+    alpha_real = alpha_re(j);
+    parfor i = 1:cp.n_im
+        alpha_c = alpha_real + 1j * alpha_im(i);
         
-        H(i, j) = compute_boundedness_function(alpha, grid, znd_all, params);
+        H(i, j) = compute_boundedness_function(alpha_c, grid, znd_all, params);
+        if abs(H(i, j)) > 10
+            H(i, j) = 10;
+        end
         fprintf('%3d, %3d\n', i, j);
     end
 end
