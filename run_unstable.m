@@ -12,7 +12,7 @@ q = 1.7; theta = 2.4;
 params = compute_aux_params(q, theta);
 
 % Resolution.
-N = 1e5;
+N = 1e4;
 
 % Lambda tolerance.
 lambda_tol = 1.0 / N;
@@ -24,11 +24,11 @@ grid = linspace(0, M, N);
 znd_all = compute_znd(grid, params);
 
 % Carpet search parameters: lb - lower bound, ub - upper bound, n - resolution.
-cp.lb_re = 0;
+cp.lb_re = -5e-2;
 cp.ub_re = 5e-2;
 cp.lb_im = 0;
 cp.ub_im = 1;
-cp.n_re = 50;
+cp.n_re = 100;
 cp.n_im = 50;
 
 [alpha_re, alpha_im, H] = compute_carpet(cp, grid, znd_all, params);
