@@ -28,8 +28,8 @@ function rhs = rhsfun_impl(~, y, idx, alpha, znd_all, params)
     znd.dw_du = znd_all.dw_du(idx);
     znd.dw_dl = znd_all.dw_dl(idx);
 
-    determinant = (d^2 - znd.u * d);
-    Ainv = (1 / determinant) * [-d  sigma
+    determinant = d^2 - znd.u * d;
+    Ainv = (1 / determinant) * [-d  -sigma
                                  0  znd.u - d];
                              
     I = eye(2, 2);
