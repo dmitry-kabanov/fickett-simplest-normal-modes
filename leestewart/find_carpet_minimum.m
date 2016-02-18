@@ -13,7 +13,7 @@ function [xmin, ymin] = find_carpet_minimum(H)
 % -------
 % xmin, ymin : int
 %     Indices of the row and the column, resp., of the minimum.
-[M, I] = min(H);
+[M, I] = min(abs(H));
 
 [mm, ii] = min(M);
 
