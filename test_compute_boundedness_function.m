@@ -14,6 +14,7 @@ N = 1e5;
 % Lambda tolerance.
 lambda_tol = 1.0 / N;
 
+% Left boundary of the computational domain.
 M = compute_x_at_point(1-lambda_tol, params);
 
 grid = linspace(0, M, N);
