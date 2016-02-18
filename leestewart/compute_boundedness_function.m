@@ -36,8 +36,8 @@ r_term_3 = -znd_dl_dx * alpha;
 numer = r_term_1 + r_term_2 + r_term_3;
 rprime = numer / params.d;
 
-term_1 = -(alpha + znd_du_dx) * pert_u;
-term_2 = znd_du_dx * alpha;
+term_1 = -alpha * pert_u;
+term_2 = -znd_du_dx * (pert_u - alpha);
 term_3 = -params.sigma * rprime;
 H = term_1 + term_2 + term_3;
 end
