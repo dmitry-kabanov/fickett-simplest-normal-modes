@@ -4,6 +4,7 @@ close all; clear all; clc
 
 resultdir = 'results/2016-02-18-steady-piston-bc/';
 matfile = strcat(resultdir, 'unstable.mat');
+picfile = strcat(resultdir, 'unstable.pdf');
 
 % Physical free parameters.
 q = 1.7; theta = 2.4;
@@ -18,5 +19,4 @@ guess = [3.3e-02; 6.7e-01];
 save(matfile);
 
 % Plotting part.
-plot_znd_and_perturbations(grid, znd_all, pert);
-export_fig_in_pdf(strcat(resultdir, 'unstable.pdf'), [4.5 8.3436]);
+plot_znd_and_perturbations(matfile, picfile);
