@@ -2,49 +2,21 @@
 % Case is unstable ZND solution.
 close all; clear all; clc
 
+resultdir = 'results/2016-02-18-steady-piston-bc/';
+matfile = strcat(resultdir, 'unstable.mat');
+
 % Physical free parameters.
 q = 1.7; theta = 2.4;
 
-% Struct with free and dependent parameters.
-params = compute_aux_params(q, theta);
-
-% N - grid resolution; lambda_tol - closeness of lambda to equilibrium value;
-% M - length of the computational domain.
+% Grid resolution;
 N = 10000;
-lambda_tol = 1.0 / N;
-M = compute_x_at_point(1-lambda_tol, params);
 
-grid = linspace(0, M, N);
-znd_all = compute_znd(grid, params);
-
-tol = 1e-12; % Tolerance for optimization.
+% Guess for eigenvalue.
 guess = [3.3e-02; 6.7e-01];
-result = find_roots_steady_piston(guess, grid, znd_all, params, tol);
 
-disp(result);
+[params, grid, znd_all, result, pert] = solve_eigenvalue_problem(q, theta, N, guess);
+save(matfile);
 
-root = result.root;
-alpha_c = root(1) + 1j*root(2);
-sol = compute_linearized_problem(alpha_c, grid, znd_all, params);
-
-save('results/2016-02-18-steady-piston-bc/unstable.mat');
-
-figure
-plot(grid, sol(1, :))
-hold on
-plot(grid, sol(3, :))
-xlabel('x')
-ylabel('Real part of perturbations')
-legend('Re u', 'Re \lambda', 'Location', 'southwest');
-export_fig_in_pdf( ...
-    'results/2016-02-18-steady-piston-bc/unstable_pert_real.pdf', [6 3.7]);
-
-figure
-plot(grid, sol(2, :))
-hold on
-plot(grid, sol(4, :))
-xlabel('x')
-ylabel('Imaginary part of perturbations')
-legend('Im u', 'Im \lambda', 'Location', 'southwest');
-export_fig_in_pdf( ...
-    'results/2016-02-18-steady-piston-bc/unstable_pert_imag.pdf', [6 3.7]);
+% Plotting part.
+plot_znd_and_perturbations(grid, znd_all, pert);
+export_fig_in_pdf(strcat(resultdir, 'unstable.pdf'), [4.5 8.3436]);
