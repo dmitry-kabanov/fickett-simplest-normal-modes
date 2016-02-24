@@ -14,8 +14,6 @@ size_y = size_inches(2);
 % http://www.mathworks.com/matlabcentral/answers/100792-in-matlab-how-do-i-obtain-information-about-my-screen-resolution-and-screen-size
 res = 96; % Resolution of my screen is 96 dots per inch.
 
-set(gcf, 'Color', 'white');
-set(gca, 'FontSize', 12);
 set(gcf, 'Position', [200, 200, size_x * res, size_y * res]);
 tight_layout();
 export_fig(filename, '-nocrop');
