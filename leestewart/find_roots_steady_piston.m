@@ -55,6 +55,13 @@ alpha_c = alpha_re + 1j*alpha_im;
 sol = compute_linearized_problem(alpha_c, grid, znd_all, params);
 uprime_re = sol(1, end);
 uprime_im = sol(2, end);
+lprime_re = sol(3, end);
+lprime_im = sol(4, end);
 
-res = abs(uprime_re + 1j*uprime_im);
+rhcond = [uprime_re - 2*alpha_re;
+          uprime_im - 2*alpha_im;
+          lprime_re;
+          lprime_im];
+
+res = norm(rhcond, 2);
 end

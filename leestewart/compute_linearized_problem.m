@@ -3,10 +3,8 @@ function [sol] = compute_linearized_problem(alpha, grid, znd_all, params)
 %   Detailed explanation goes here
 
 rhsfun = @(t, y, idx) rhsfun_impl(t, y, idx, alpha, znd_all, params);
-alpha_re = real(alpha);
-alpha_im = imag(alpha);
 
-ic = [2*alpha_re; 2*alpha_im; 0; 0];
+ic = [params.uprime_re; params.uprime_im; params.lprime_re; params.lprime_im];
 sol = rk4(rhsfun, grid, ic);
 end
 
@@ -43,14 +41,4 @@ function rhs = rhsfun_impl(~, y, idx, alpha, znd_all, params)
     rhs(2) = imag(tmp(1));
     rhs(3) = real(tmp(2));
     rhs(4) = imag(tmp(2));
-end
-
-
-%--------------------------------------------------------------------------
-function [value, isterminal, direction] = event_check_singular_du_dx(~, y)
-u = y(1);
-
-value = abs(u) - 1000;
-isterminal = 1;
-direction = 0;
 end

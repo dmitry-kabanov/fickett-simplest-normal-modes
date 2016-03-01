@@ -1,16 +1,20 @@
-function [params, grid, znd_all, result, pert] = solve_eigenvalue_problem(q, theta, N, guess)
+function [params, grid, znd_all, result, pert] = solve_eigenvalue_problem(q, theta, N, guess, pert_guess)
 %SOLVE_EIGENVALUE_PROBLEM Summary of this function goes here
 %   Detailed explanation goes here
 
 % Struct with free and dependent parameters.
 params = compute_aux_params(q, theta);
+params.uprime_re = pert_guess(1);
+params.uprime_im = pert_guess(2);
+params.lprime_re = pert_guess(3);
+params.lprime_im = pert_guess(4);
 
 % lambda_tol - closeness of lambda to equilibrium value;
 % M - length of the computational domain.
 lambda_tol = 1.0 / N;
 M = compute_x_at_point(1-lambda_tol, params);
 
-grid = linspace(0, M, N);
+grid = linspace(M, 0, N);
 znd_all = compute_znd(grid, params);
 
 tol = 1e-12; % Tolerance for optimization.
