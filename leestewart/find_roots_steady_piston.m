@@ -33,13 +33,14 @@ alpha_im = guess(2);
 
 % Use builtin MATLAB function for unconstrained nonlinear optimization.
 fun = @(x) fun_impl(x, grid, znd_all, params);
-opts = optimset('TolX', tol, 'TolFun', tol, 'Display', 'iter');
-[x, fval, exitflag, output] = fminsearch(fun, [alpha_re, alpha_im], opts);
+opts = optimoptions('fsolve', 'TolX', tol, 'TolFun', tol, 'Display', 'iter');
+[x, fval, exitflag, output] = fsolve(fun, [alpha_re, alpha_im], opts);
 
-assert(exitflag == 1, '`fminsearch` terminated with not successful result');
+%assert(exitflag == 1, 'Optimization process terminated with not a successful result');
 
 result.root = x;
 result.fval = fval;
+result.exitflag = exitflag;
 result.output = output;
 end
 

@@ -2,7 +2,7 @@
 % Case is neutral ZND solution.
 close all; clear all; clc
 
-resultdir = 'results/2016-02-18-steady-piston-bc/';
+resultdir = 'results/2016-03-06-steady-piston-bc-fsolve/';
 matfile = strcat(resultdir, 'neutral.mat');
 picfile = strcat(resultdir, 'neutral.pdf');
 
