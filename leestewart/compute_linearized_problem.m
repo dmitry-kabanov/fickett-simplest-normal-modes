@@ -1,10 +1,9 @@
-function [sol] = compute_linearized_problem(alpha, grid, znd_all, params)
+function [sol] = compute_linearized_problem(alpha, ic, grid, znd_all, params)
 %COMPUTE_LINEARIZED_PROBLEM Summary of this function goes here
 %   Detailed explanation goes here
 
 rhsfun = @(t, y, idx) rhsfun_impl(t, y, idx, alpha, znd_all, params);
 
-ic = [params.uprime_re; params.uprime_im; params.lprime_re; params.lprime_im];
 sol = rk4(rhsfun, grid, ic);
 end
 

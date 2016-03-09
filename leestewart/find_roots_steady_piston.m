@@ -28,31 +28,31 @@ function [result] = find_roots_steady_piston(guess, grid, znd_all, params, tol)
 %         output : struct
 %             Structure containing information about the optimization.
 %             Provided by `fminsearch`.
-alpha_re = guess(1);
-alpha_im = guess(2);
-
 % Use builtin MATLAB function for unconstrained nonlinear optimization.
 fun = @(x) fun_impl(x, grid, znd_all, params);
-opts = optimset('TolX', tol, 'TolFun', tol, 'Display', 'iter');
-[x, fval, exitflag, output] = fminsearch(fun, [alpha_re, alpha_im], opts);
+opts = optimoptions('fsolve', 'TolX', tol, 'TolFun', tol, 'Display', 'iter');
+[x, fval, exitflag, output] = fsolve(fun, guess, opts);
 
-assert(exitflag == 1, '`fminsearch` terminated with not successful result');
+%assert(exitflag == 1, '`fminsearch` terminated with not successful result');
 
 result.root = x;
 result.fval = fval;
+result.exitflag = exitflag;
 result.output = output;
 end
 
 
 %-------------------------------------------------------------------------------
-function res = fun_impl(alpha_arr, grid, znd_all, params)
+function res = fun_impl(given, grid, znd_all, params)
 % Compute residual of the system.
-alpha_re = alpha_arr(1);
-alpha_im = alpha_arr(2);
+ic = [given(1); given(2); 0.0; 0.0];
+
+alpha_re = given(3);
+alpha_im = given(4);
 
 alpha_c = alpha_re + 1j*alpha_im;
 
-sol = compute_linearized_problem(alpha_c, grid, znd_all, params);
+sol = compute_linearized_problem(alpha_c, ic, grid, znd_all, params);
 uprime_re = sol(1, end);
 uprime_im = sol(2, end);
 lprime_re = sol(3, end);
@@ -63,5 +63,5 @@ rhcond = [uprime_re - 2*alpha_re;
           lprime_re;
           lprime_im];
 
-res = norm(rhcond, 2);
+res = rhcond;
 end

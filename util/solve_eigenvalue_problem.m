@@ -1,13 +1,9 @@
-function [params, grid, znd_all, result, pert] = solve_eigenvalue_problem(q, theta, N, guess, pert_guess)
+function [params, grid, znd_all, result, pert] = solve_eigenvalue_problem(q, theta, N, guess)
 %SOLVE_EIGENVALUE_PROBLEM Summary of this function goes here
 %   Detailed explanation goes here
 
 % Struct with free and dependent parameters.
 params = compute_aux_params(q, theta);
-params.uprime_re = pert_guess(1);
-params.uprime_im = pert_guess(2);
-params.lprime_re = pert_guess(3);
-params.lprime_im = pert_guess(4);
 
 % lambda_tol - closeness of lambda to equilibrium value;
 % M - length of the computational domain.
@@ -23,7 +19,9 @@ result = find_roots_steady_piston(guess, grid, znd_all, params, tol);
 disp(result);
 
 root = result.root;
-alpha_c = root(1) + 1j*root(2);
-pert = compute_linearized_problem(alpha_c, grid, znd_all, params);
+ic = [root(1); root(2); 0; 0];
+alpha_c = root(3) + 1j*root(4);
+
+pert = compute_linearized_problem(alpha_c, ic, grid, znd_all, params);
 end
 
