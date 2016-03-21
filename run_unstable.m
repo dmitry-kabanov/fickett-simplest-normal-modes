@@ -2,7 +2,7 @@
 % Case is unstable ZND solution.
 close all; clear all; clc
 
-resultdir = 'results/2016-02-18-steady-piston-bc/';
+resultdir = 'results/2016-03-23-new-radiation-condition-tol=1e-4/';
 matfile = strcat(resultdir, 'unstable.mat');
 picfile = strcat(resultdir, 'unstable.pdf');
 
@@ -13,7 +13,7 @@ q = 1.7; theta = 2.4;
 N = 10000;
 
 % Guess for eigenvalue.
-guess = [3.3e-02; 6.7e-01];
+guess = [0.032727272727273; 0.662626262626263];
 
 [params, grid, znd_all, result, pert] = solve_eigenvalue_problem(q, theta, N, guess);
 save(matfile);
