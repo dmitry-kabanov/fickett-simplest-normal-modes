@@ -24,8 +24,8 @@ grid = linspace(0, M, N);
 znd_all = compute_znd(grid, params);
 
 % Carpet search parameters: lb - lower bound, ub - upper bound, n - resolution.
-cp.lb_re = -5e-2;
-cp.ub_re = 5e-2;
+cp.lb_re = 3e-2;
+cp.ub_re = 4e-2;
 cp.lb_im = 0;
 cp.ub_im = 1;
 cp.n_re = 100;

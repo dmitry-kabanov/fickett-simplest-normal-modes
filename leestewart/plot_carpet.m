@@ -15,8 +15,16 @@ function plot_carpet(alpha_re, alpha_im, H)
 
 [A_RE, A_IM] = meshgrid(alpha_re, alpha_im);
 
+res = log(1+abs(H));
+
 figure
-surf(A_RE, A_IM, abs(H))
+surf(A_RE, A_IM, res)
 xlabel('\Re \alpha')
 ylabel('\Im \alpha')
-title('abs(H)')
+title('log(1 + abs(H))')
+
+figure
+contourf(A_RE, A_IM, res)
+xlabel('\Re \alpha')
+ylabel('\Im \alpha')
+title('log(1 + abs(H))')
