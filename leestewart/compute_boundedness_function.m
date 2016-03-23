@@ -19,25 +19,18 @@ sol = compute_linearized_problem(alpha, grid, znd_all, params);
 
 pert_u_re = sol(1, end);
 pert_u_im = sol(2, end);
-pert_lambda_re = sol(3, end);
-pert_lambda_im = sol(4, end);
+pert_l_re = sol(3, end);
+pert_l_im = sol(4, end);
 
 pert_u = pert_u_re + 1j * pert_u_im;
-pert_lambda = pert_lambda_re + 1j * pert_lambda_im;
+pert_l = pert_l_re + 1j * pert_l_im;
 
-znd_du_dx = znd_all.dl_dx(end);
-znd_dl_dx = znd_all.dl_dx(end);
-znd_dw_du = znd_all.dw_du(end);
+znd_u = znd_all.u(end);
 znd_dw_dl = znd_all.dw_dl(end);
 
-r_term_1 = -znd_dw_du * pert_u;
-r_term_2 = (alpha - znd_dw_dl) * pert_lambda;
-r_term_3 = -znd_dl_dx * alpha;
-numer = r_term_1 + r_term_2 + r_term_3;
-rprime = numer / params.d;
+sigma = params.sigma;
 
-term_1 = -alpha * pert_u;
-term_2 = -znd_du_dx * (pert_u - alpha);
-term_3 = -params.sigma * rprime;
-H = term_1 + term_2 + term_3;
+term_1 = alpha * (znd_u * pert_u + sigma * pert_l);
+term_2 = -sigma * znd_dw_dl * pert_l;
+H = term_1 + term_2;
 end
