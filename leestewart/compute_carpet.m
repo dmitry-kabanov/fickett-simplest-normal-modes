@@ -66,9 +66,6 @@ for j = 1:cp.n_re
         alpha_c = alpha_real + 1j * alpha_im(i);
         
         H(i, j) = compute_boundedness_function(alpha_c, grid, znd_all, params);
-%         if abs(H(i, j)) > 10
-%             H(i, j) = 10;
-%         end
         fprintf('%3d, %3d\n', i, j);
     end
 end
