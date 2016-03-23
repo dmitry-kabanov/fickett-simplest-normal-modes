@@ -2,15 +2,15 @@
 % Case is unstable ZND solution.
 close all; clear all; clc
 
-resultdir = 'results/2016-03-23-new-radiation-condition-tol=1e-4/';
-matfile = strcat(resultdir, 'unstable.mat');
-picfile = strcat(resultdir, 'unstable.pdf');
+resultdir = 'results/2016-03-23-new-radiation-condition-tol=1e-5/';
+picfilename = strcat(resultdir, 'unstable');
+matfile = strcat(picfilename, '.mat');
 
 % Physical free parameters.
 q = 1.7; theta = 2.4;
 
 % Grid resolution;
-N = 10000;
+N = 100000;
 
 % Guess for eigenvalue.
 guess.alpha_re = 0.032727272727273;
@@ -20,4 +20,4 @@ guess.alpha_im = 0.662626262626263;
 save(matfile);
 
 % Plotting part.
-plot_znd_and_perturbations(matfile, picfile);
+plot_znd_and_perturbations(picfilename);

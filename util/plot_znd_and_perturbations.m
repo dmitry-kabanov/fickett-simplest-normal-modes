@@ -1,4 +1,4 @@
-function plot_znd_and_perturbations(matfile, picfile)
+function plot_znd_and_perturbations(filename)
 %PLOT_ZND_AND_PERTURBATIONS Plot ZND solution and perturbations.
 %
 % ZND solution, real parts and imaginary parts of perturbations are plotted
@@ -7,11 +7,13 @@ function plot_znd_and_perturbations(matfile, picfile)
 %
 % Parameters
 % ----------
-% matfile : str
+% filename : str
 %     Filename of the MAT-file with the results of computations.
-% picfile : str
-%     Filename of the resulting picture file.
+%     Filename should not contain the extension `.mat`; it will be added
+%     automatically. The same ``filename`` but with extension `.pdf` will
+%     be used to export the plot in PDF format.
 %
+matfile = strcat(filename, '.mat');
 r = load(matfile); % Load results from the `matfile` into `r` struct.
 
 figure
@@ -39,5 +41,6 @@ xlabel('x')
 title('Imaginary part')
 legend('Im u', 'Im \lambda', 'Location', 'southwest');
 
-export_fig(picfile);
+savefig(filename);
+export_fig(strcat(filename, '.pdf'));
 end
