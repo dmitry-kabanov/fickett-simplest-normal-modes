@@ -13,12 +13,11 @@ M = compute_x_at_point(1-lambda_tol, params);
 grid = linspace(0, M, N);
 znd_all = compute_znd(grid, params);
 
-tol = 1e-12; % Tolerance for optimization.
-result = find_roots_steady_piston(guess, grid, znd_all, params, tol);
+result = minimize_boundedness_function(guess, grid, znd_all, params);
 
 disp(result);
 
-root = result.root;
+root = result.x;
 alpha_c = root(1) + 1j*root(2);
 pert = compute_linearized_problem(alpha_c, grid, znd_all, params);
 end

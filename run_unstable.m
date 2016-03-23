@@ -13,7 +13,8 @@ q = 1.7; theta = 2.4;
 N = 10000;
 
 % Guess for eigenvalue.
-guess = [0.032727272727273; 0.662626262626263];
+guess.alpha_re = 0.032727272727273;
+guess.alpha_im = 0.662626262626263;
 
 [params, grid, znd_all, result, pert] = solve_eigenvalue_problem(q, theta, N, guess);
 save(matfile);
