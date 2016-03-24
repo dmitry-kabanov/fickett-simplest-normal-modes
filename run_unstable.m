@@ -2,7 +2,9 @@
 % Case is unstable ZND solution.
 close all; clear all; clc
 
-resultdir = 'results/2016-03-23-new-radiation-condition-tol=1e-5/';
+resultdir = 'results/2016-03-24-new-radiation-condition-tol=1e-6/';
+assert(exist(resultdir, 'dir') == 7);
+
 picfilename = strcat(resultdir, 'unstable');
 matfile = strcat(picfilename, '.mat');
 
@@ -10,7 +12,7 @@ matfile = strcat(picfilename, '.mat');
 q = 1.7; theta = 2.4;
 
 % Grid resolution;
-N = 100000;
+N = 1000000;
 
 % Guess for eigenvalue.
 guess.alpha_re = 0.032727272727273;
