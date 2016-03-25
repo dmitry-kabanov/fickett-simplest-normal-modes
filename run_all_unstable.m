@@ -24,12 +24,12 @@ grid = linspace(0, M, N);
 znd_all = compute_znd(grid, params);
 
 % Carpet search parameters: lb - lower bound, ub - upper bound, n - resolution.
-cp.lb_re = -5e-2;
-cp.ub_re = 5e-2;
-cp.lb_im = 0;
-cp.ub_im = 1;
+cp.lb_re = 0.03;
+cp.ub_re = 0.04;
+cp.lb_im = 0.6;
+cp.ub_im = 0.7;
 cp.n_re = 100;
-cp.n_im = 50;
+cp.n_im = 100;
 
 [alpha_re, alpha_im, H] = compute_carpet(cp, grid, znd_all, params);
 plot_carpet(alpha_re, alpha_im, H);
