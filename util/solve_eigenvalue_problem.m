@@ -21,4 +21,3 @@ root = result.x;
 alpha_c = root(1) + 1j*root(2);
 pert = compute_linearized_problem(alpha_c, grid, znd_all, params);
 end
-
