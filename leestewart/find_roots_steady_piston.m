@@ -45,10 +45,10 @@ end
 %-------------------------------------------------------------------------------
 function res = fun_impl(given, grid, znd_all, params)
 % Compute residual of the system.
-ic = [given(1); given(2); 0.0; 0.0];
+ic = [given(1); given(2); given(3); given(4)];
 
-alpha_re = given(3);
-alpha_im = given(4);
+alpha_re = given(5);
+alpha_im = given(6);
 
 alpha_c = alpha_re + 1j*alpha_im;
 
@@ -63,5 +63,5 @@ rhcond = [uprime_re - 2*alpha_re;
           lprime_re;
           lprime_im];
 
-res = rhcond;
+res = norm(rhcond, 2);
 end

@@ -19,8 +19,8 @@ result = find_roots_steady_piston(guess, grid, znd_all, params, tol);
 disp(result);
 
 root = result.root;
-ic = [root(1); root(2); 0; 0];
-alpha_c = root(3) + 1j*root(4);
+ic = [root(1); root(2); root(3); root(4)];
+alpha_c = root(5) + 1j*root(6);
 
 pert = compute_linearized_problem(alpha_c, ic, grid, znd_all, params);
 end
